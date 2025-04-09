@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint  --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "install-prod-sdk": "npm install @genezio-sdk/camin_eu-central-1@^1.0.0-prod"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.11",
@@ -16,8 +15,8 @@
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
-    "@genezio-sdk/camin-runtime": "^1.0.0-prod",
-    "@genezio/auth": "^2.1.1",
+    "@genezio-sdk/spalatorie-camin": "^1.0.0-prod",
+    "@genezio/auth": "^2.1.2",
     "@genezio/vite-plugin-genezio": "^1.0.4",
     "@react-oauth/google": "^0.12.1",
     "bootstrap": "^5.3.3",

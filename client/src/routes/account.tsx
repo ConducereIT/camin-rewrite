@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavbarComponent from "../components/navbar.component.tsx";
-import { BackendService } from "@genezio-sdk/camin-runtime";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -107,10 +107,15 @@ const Account: React.FC = () => {
         <NavbarComponent />
         <div className="container mt-5">
           <div className="bg-white p-4 rounded shadow">
-            <h1 style={{ color: "#212529" }}>Account Settings - {user?.name}</h1>
+            <h1 style={{ color: "#212529" }}>
+              Account Settings - {user?.name}
+            </h1>
             <form onSubmit={handleSubmit} className="mt-2">
               {error && (
-                <p className="text-danger alert alert-danger mt-4" style={{ marginBottom: "-2rem;" }}>
+                <p
+                  className="text-danger alert alert-danger mt-4"
+                  style={{ marginBottom: "-2rem;" }}
+                >
                   {error}
                 </p>
               )}
@@ -138,7 +143,11 @@ const Account: React.FC = () => {
                   onChange={(e) => setCameraModel(e.target.value)}
                 />
               </div>
-              <button type="submit" className="btn btn-primary bg-hover-primary" style={{border:"1px solid black"}}>
+              <button
+                type="submit"
+                className="btn btn-primary bg-hover-primary"
+                style={{ border: "1px solid black" }}
+              >
                 {loading ? "Loading..." : editMode ? "Update" : "Submit"}
               </button>
             </form>

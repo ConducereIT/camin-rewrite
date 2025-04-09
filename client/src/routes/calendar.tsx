@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Col, Container, Nav, Row, Tab, Card } from "react-bootstrap";
 import CalendarComponent from "../components/calendar.component.tsx";
 import CalendarMobileComponent from "../components/calendar.mobile.component.tsx";
-import { BackendService } from "@genezio-sdk/camin-runtime";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
@@ -55,6 +55,12 @@ const Calendars: React.FC = () => {
   useEffect(() => {
     const isLoggedIn = async () => {
       try {
+        const token = localStorage.getItem("token") as string;
+
+        if (!token) {
+          navigate("/login");
+        }
+
         await AuthService.getInstance().userInfoForToken(
           localStorage.getItem("token") as string
         );
@@ -81,7 +87,11 @@ const Calendars: React.FC = () => {
   return (
     <>
       <NavbarComponent />
-      <section className="project calendare" id="project" style={{ backgroundColor: '#fff3d1' }}>
+      <section
+        className="project calendare"
+        id="project"
+        style={{ backgroundColor: "#fff3d1" }}
+      >
         <Container>
           <Row>
             <Col xs={12}>
@@ -93,14 +103,25 @@ const Calendars: React.FC = () => {
                       activeKey={activeTab}
                       onSelect={handleTabChange}
                     >
-                      <Nav className="nav-pills mb-4 justify-content-center flex-wrap" id="pills-tab">
+                      <Nav
+                        className="nav-pills mb-4 justify-content-center flex-wrap"
+                        id="pills-tab"
+                      >
                         <Row className="w-100">
                           {dayNames.map((day) => (
-                            <Col xs={6} sm={4} md={3} className="mb-2" key={day}>
+                            <Col
+                              xs={6}
+                              sm={4}
+                              md={3}
+                              className="mb-2"
+                              key={day}
+                            >
                               <Nav.Item>
                                 <Nav.Link
                                   eventKey={day}
-                                  className={`btn btn-secondary w-100 ${activeTab === day ? "active" : ""}`}
+                                  className={`btn btn-secondary w-100 ${
+                                    activeTab === day ? "active" : ""
+                                  }`}
                                   style={{ border: "1px solid black" }}
                                 >
                                   {`Mașina ${dayNames.indexOf(day) + 1}`}
