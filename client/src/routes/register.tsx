@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
-import { BackendService } from "@genezio-sdk/camin-runtime";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [registerLoading, setRegisterLoading] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -30,11 +30,21 @@ const Register: React.FC = () => {
 
     const isLoggedIn = async () => {
       try {
+        const token = localStorage.getItem("token") as string;
+        if (!token) {
+          console.log("No token found");
+          return;
+        }
+
         const response = await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string,
+          localStorage.getItem("token") as string
         );
 
-        if (isMounted && response && await BackendService.checkHasPhoneAndCamera()) {
+        if (
+          isMounted &&
+          response &&
+          (await BackendService.checkHasPhoneAndCamera())
+        ) {
           navigate("/");
         } else {
           navigate("/account");
@@ -56,7 +66,7 @@ const Register: React.FC = () => {
 
     try {
       await AuthService.getInstance().googleRegistration(
-        credentialResponse.credential!,
+        credentialResponse.credential!
       );
 
       if (await BackendService.checkHasPhoneAndCamera()) {
@@ -74,11 +84,15 @@ const Register: React.FC = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4" style={{ maxWidth: '400px', width: '100%' }}>
+      <div className="card p-4" style={{ maxWidth: "400px", width: "100%" }}>
         <div className="mb-1 text-center">
           <div className="d-flex justify-content-center">
             {googleLoginLoading ? (
-              <div className="spinner-border text-muted" role="status" style={{ width: '3rem', height: '3rem' }}>
+              <div
+                className="spinner-border text-muted"
+                role="status"
+                style={{ width: "3rem", height: "3rem" }}
+              >
                 <span className="visually-hidden">Loading...</span>
               </div>
             ) : (
@@ -114,7 +128,7 @@ const Register: React.FC = () => {
               id="name"
               className="form-control"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -127,7 +141,7 @@ const Register: React.FC = () => {
               id="email"
               className="form-control"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -140,19 +154,16 @@ const Register: React.FC = () => {
               id="password"
               className="form-control"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button
-            type="submit"
-            className="btn btn-secondary w-100"
-          >
+          <button type="submit" className="btn btn-secondary w-100">
             {registerLoading ? "Loading..." : "Crează cont"}
           </button>
           <button
             type="button"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
             className="btn btn-secondary w-100 mt-3"
           >
             Autentificare

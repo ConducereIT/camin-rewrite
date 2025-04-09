@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import { BackendService } from "@genezio-sdk/camin-runtime";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 
 const Mentenanta: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState<number>(0);

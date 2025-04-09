@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {AuthService} from "@genezio/auth";
-import {useNavigate} from "react-router-dom";
-import {BackendService} from "@genezio-sdk/camin-runtime";
-import {formatDate} from "@fullcalendar/core";
+import React, { useEffect, useState } from "react";
+import { AuthService } from "@genezio/auth";
+import { useNavigate } from "react-router-dom";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
+import { formatDate } from "@fullcalendar/core";
 
 const Admin: React.FC = () => {
   const [eventsDate, setEventsDate] = useState<{ [key: string]: any }>({});
@@ -12,8 +12,14 @@ const Admin: React.FC = () => {
   useEffect(() => {
     const isLoggedIn = async () => {
       try {
+        const token = localStorage.getItem("token") as string;
+
+        if (!token) {
+          navigate("/");
+        }
+
         const response = await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string,
+          localStorage.getItem("token") as string
         );
         if (
           response.email === "rezervaricaminleu@gmail.com" ||
@@ -90,50 +96,64 @@ const Admin: React.FC = () => {
         </div>
         <table className="table mt-5">
           <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">User</th>
-            <th scope="col">Masină</th>
-            <th scope="col">Delete</th>
-          </tr>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Start Date</th>
+              <th scope="col">End Date</th>
+              <th scope="col">User</th>
+              <th scope="col">Masină</th>
+              <th scope="col">Delete</th>
+            </tr>
           </thead>
           <tbody>
-          {Object.keys(eventsDate)
-            .map((key) => eventsDate[key])
-            .map((event: any) => (
-              <tr key={event.id}>
-                <th scope="row">{event.id}</th>
-                <td>{formatDate(event.start, {
-                  day: "numeric",
-                  month: "numeric",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: false,
-                })}</td>
-                <td>{formatDate(event.end, {
-                  day: "numeric",
-                  month: "numeric",
-                  year: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: false,
-                })}</td>
-                <td>{event.title}</td>
-                <td>{event.number == "first" ? "1" : event.number == "second" ? "2" : event.number == "third" ? "3" : event.number == "four" ? "4" : "invalid"}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => handleDeleteEvent(event)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {Object.keys(eventsDate)
+              .map((key) => eventsDate[key])
+              .map((event: any) => (
+                <tr key={event.id}>
+                  <th scope="row">{event.id}</th>
+                  <td>
+                    {formatDate(event.start, {
+                      day: "numeric",
+                      month: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: false,
+                    })}
+                  </td>
+                  <td>
+                    {formatDate(event.end, {
+                      day: "numeric",
+                      month: "numeric",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: false,
+                    })}
+                  </td>
+                  <td>{event.title}</td>
+                  <td>
+                    {event.number == "first"
+                      ? "1"
+                      : event.number == "second"
+                      ? "2"
+                      : event.number == "third"
+                      ? "3"
+                      : event.number == "four"
+                      ? "4"
+                      : "invalid"}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => handleDeleteEvent(event)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

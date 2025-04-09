@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {CredentialResponse, GoogleLogin} from "@react-oauth/google";
-import {AuthService} from "@genezio/auth";
-import {useNavigate} from "react-router-dom";
-import {BackendService} from "@genezio-sdk/camin-runtime";
+import React, { useEffect, useState } from "react";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { AuthService } from "@genezio/auth";
+import { useNavigate } from "react-router-dom";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -29,14 +29,24 @@ const Login: React.FC = () => {
 
     const isLoggedIn = async () => {
       try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.log("No token found");
+          return;
+        }
+
         const response = await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string,
+          token
         );
 
-        if (isMounted && response && await BackendService.checkHasPhoneAndCamera()) {
+        if (
+          isMounted &&
+          response &&
+          (await BackendService.checkHasPhoneAndCamera())
+        ) {
           navigate("/");
-        }
-        else{
+        } else {
           navigate("/account");
         }
       } catch (error) {
@@ -56,7 +66,7 @@ const Login: React.FC = () => {
 
     try {
       await AuthService.getInstance().googleRegistration(
-        credentialResponse.credential!,
+        credentialResponse.credential!
       );
 
       if (await BackendService.checkHasPhoneAndCamera()) {
@@ -74,7 +84,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="card p-4" style={{maxWidth: '400px', width: '100%'}}>
+      <div className="card p-4" style={{ maxWidth: "400px", width: "100%" }}>
         <div className="mb-1 text-center">
           <div className="d-flex justify-content-center">
             {googleLoginLoading ? (
@@ -112,7 +122,7 @@ const Login: React.FC = () => {
               id="email"
               className="form-control"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="form-group mb-3">
@@ -124,7 +134,7 @@ const Login: React.FC = () => {
               id="password"
               className="form-control"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           {/*<div className="mb-3 text-end">*/}
@@ -135,13 +145,13 @@ const Login: React.FC = () => {
           <button
             type="submit"
             className="btn btn-secondary w-100"
-            style={{background:"#FFAE1F"}}
+            style={{ background: "#FFAE1F" }}
           >
             {loginLoading ? "Loading..." : "Autentificare"}
           </button>
           <button
             type="button"
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate("/signup")}
             className="btn btn-secondary w-100 mt-3"
           >
             Crează cont

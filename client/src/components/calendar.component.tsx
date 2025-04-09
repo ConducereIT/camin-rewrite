@@ -3,9 +3,9 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { BackendService } from "@genezio-sdk/camin-runtime";
+import { BackendService } from "@genezio-sdk/spalatorie-camin";
 import { Modal, Button, Toast, ToastContainer, Spinner } from "react-bootstrap";
-import {AuthService} from "@genezio/auth";
+import { AuthService } from "@genezio/auth";
 
 interface RenderCalendarProps {
   dayCalendar: string;
@@ -14,9 +14,9 @@ interface RenderCalendarProps {
 }
 
 const RenderCalendar: React.FC<RenderCalendarProps> = ({
-                                                         dayCalendar,
-                                                         eventsDate,
-                                                       }) => {
+  dayCalendar,
+  eventsDate,
+}) => {
   const [notification, setNotification] = useState<string | null>(null);
   const [hoveredEvent, setHoveredEvent] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -83,7 +83,10 @@ const RenderCalendar: React.FC<RenderCalendarProps> = ({
     try {
       const startDate = event.event.startStr;
       const endDate = event.event.endStr;
-      const deleteEvents = await BackendService.deletePerson(startDate, endDate);
+      const deleteEvents = await BackendService.deletePerson(
+        startDate,
+        endDate
+      );
 
       if (deleteEvents.status) {
         showNotification(deleteEvents.message);
@@ -118,9 +121,22 @@ const RenderCalendar: React.FC<RenderCalendarProps> = ({
     <div className="calendar" ref={calendarRef}>
       <ToastContainer
         position="top-end"
-        style={{ position: "fixed", top: 10, right: 10, zIndex: 1000, paddingTop: "6.5rem", paddingRight: "1rem" }}
+        style={{
+          position: "fixed",
+          top: 10,
+          right: 10,
+          zIndex: 1000,
+          paddingTop: "6.5rem",
+          paddingRight: "1rem",
+        }}
       >
-        <Toast show={showToast} onClose={() => setShowToast(false)} delay={5000} autohide style={{ background: "white" }}>
+        <Toast
+          show={showToast}
+          onClose={() => setShowToast(false)}
+          delay={5000}
+          autohide
+          style={{ background: "white" }}
+        >
           <Toast.Header>
             <strong className="me-auto">Notificare</strong>
           </Toast.Header>
@@ -199,7 +215,11 @@ const RenderCalendar: React.FC<RenderCalendarProps> = ({
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Anulează
           </Button>
-          <Button variant="secondary" onClick={handleConfirmReservation} disabled={loading}>
+          <Button
+            variant="secondary"
+            onClick={handleConfirmReservation}
+            disabled={loading}
+          >
             {loading ? (
               <>
                 <Spinner
