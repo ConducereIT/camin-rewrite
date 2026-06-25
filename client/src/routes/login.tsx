@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
-import { BackendService } from "@genezio-sdk/spalatorie-camin";
+import { BackendService } from "genezio-sdk";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

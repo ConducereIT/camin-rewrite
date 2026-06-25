@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
-import { BackendService } from "@genezio-sdk/spalatorie-camin";
+import { BackendService } from "genezio-sdk";
 import { formatDate } from "@fullcalendar/core";
 import NavbarComponent from "../components/navbar.component.tsx";
 

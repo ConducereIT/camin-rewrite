@@ -3,7 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { BackendService } from "@genezio-sdk/spalatorie-camin";
+import { BackendService } from "genezio-sdk";
 import { Modal, Button, Toast, ToastContainer, Spinner } from "react-bootstrap";
 import { AuthService } from "@genezio/auth";
 

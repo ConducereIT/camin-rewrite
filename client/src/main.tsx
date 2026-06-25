@@ -17,7 +17,7 @@ import { PreloaderProvider } from "./components/PreloaderProvider.component.tsx"
 import Preloader from "./components/Preloader.component.tsx";
 import Register from "./routes/register.tsx";
 import Mentenanta from "./routes/mentenanta.tsx";
-import { BackendService } from "@genezio-sdk/spalatorie-camin";
+import { BackendService } from "genezio-sdk";
 
 AuthService.getInstance().setTokenAndRegion(
   "1-a3036f2f-8a7c-495c-8d24-06695b1ad57f",
