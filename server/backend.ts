@@ -18,14 +18,13 @@ export type DeletePersonResponse = {
   message: string;
 };
 
-@GenezioDeploy()
 export class BackendService {
   prisma: PrismaClient;
-  mailer: Send_mailer;
+  // mailer: Send_mailer;
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.mailer = new Send_mailer();
+    // this.mailer = new Send_mailer();
   }
 
   @GenezioAuth()
@@ -387,14 +386,14 @@ export class BackendService {
           break;
       }
 
-      await this.mailer.send(
-        context.user!.email,
-        "Programare spalatorie camin leu - " + masina,
-        context.user!.name!,
-        startDate,
-        endDate,
-        masina,
-      );
+      // await this.mailer.send(
+      //   context.user!.email,
+      //   "Programare spalatorie camin leu - " + masina,
+      //   context.user!.name!,
+      //   startDate,
+      //   endDate,
+      //   masina,
+      // );
 
       return {status: true, message: "S-a adaugat!"};
     } catch (error) {
@@ -479,19 +478,19 @@ export class BackendService {
       });
 
       for (let i = 0; i < events.length; i++) {
-        await this.mailer.sendNotifyFinish(
-          events[i].email,
-          "Programarea ta se termina in 10 minute!",
-          events[i].title,
-        );
+        // await this.mailer.sendNotifyFinish(
+        //   events[i].email,
+        //   "Programarea ta se termina in 10 minute!",
+        //   events[i].title,
+        // );
       }
 
       for (let i = 0; i < eventsStart.length; i++) {
-        await this.mailer.sendNotifyStart(
-          eventsStart[i].email,
-          "Programarea ta incepe in 10 minute!",
-          eventsStart[i].title,
-        );
+        // await this.mailer.sendNotifyStart(
+        //   eventsStart[i].email,
+        //   "Programarea ta incepe in 10 minute!",
+        //   eventsStart[i].title,
+        // );
       }
     } catch (error) {
       console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
