@@ -18,6 +18,7 @@
     "@genezio/auth": "^2.1.2",
     "@genezio/vite-plugin-genezio": "^1.0.4",
     "@react-oauth/google": "^0.12.1",
+    "better-auth": "^1.6.21",
     "bootstrap": "^5.3.3",
     "genezio-sdk": "file:../client-ts/sdk/genezio-sdk-1.0.0.tgz",
     "googleapis": "^133.0.0",
