@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: rezervariCamin
+    volumes:
+    - ../volumes/db:/var/lib/postgresql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+    - 8030:8080
