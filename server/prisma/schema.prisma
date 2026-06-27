@@ -22,7 +22,7 @@ model events {
 
 model infoUser {
   id     Int    @id @default(autoincrement())
-  userId String @unique
+  userId String @unique @db.Uuid // Changed to @db.Uuid to match User.id
   phone  String
   camera String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -35,7 +35,7 @@ model maintenance {
 }
 
 model User {
-  id            String    @id
+  id            String    @id @default(uuid()) @db.Uuid // Generates native UUIDs
   name          String
   email         String
   emailVerified Boolean   @default(false)
@@ -51,14 +51,14 @@ model User {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(uuid()) @db.Uuid // Changed to @db.Uuid
   expiresAt DateTime
   token     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
-  userId    String
+  userId    String   @db.Uuid // Changed to @db.Uuid to match User.id
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
@@ -67,10 +67,10 @@ model Session {
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(uuid()) @db.Uuid // Changed to @db.Uuid
   accountId             String
   providerId            String
-  userId                String
+  userId                String    @db.Uuid // Changed to @db.Uuid to match User.id
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -87,7 +87,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(uuid()) @db.Uuid // Changed to @db.Uuid
   identifier String
   value      String
   expiresAt  DateTime
