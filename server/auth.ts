@@ -1,10 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "./prisma/generated/prisma/client";
+import { prisma } from "./db";
 
 import bcrypt from "bcrypt";
 
-export const prisma = new PrismaClient();
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_BASE_URL,
   database: prismaAdapter(prisma, {
