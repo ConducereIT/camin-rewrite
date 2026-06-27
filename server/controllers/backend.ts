@@ -7,6 +7,7 @@ import {
 import moment from "moment";
 import {PrismaClient} from "@prisma/client";
 import {Send_mailer} from "./send-mail";
+import { prisma } from "./auth";
 
 export type AddPersonResponse = {
   status: boolean;
