@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
-import { BackendService } from "genezio-sdk";
+
+import GoogleButton from "react-google-signin-button";
+import "react-google-signin-button/dist/button.css";
+import { useAuth } from "../provider/authProvider";
 
 const Login: React.FC = () => {
+  const authContext = useAuth();
   const navigate = useNavigate();
   const [loginLoading, setLoginLoading] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
@@ -14,72 +16,13 @@ const Login: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoginLoading(true);
+    authContext.loginWithEmail({
+      email: email,
+      password: password,
+      callbackURL: import.meta.env.VITE_BASE_URL + "/login",
+    });
 
-    try {
-      await AuthService.getInstance().login(email, password);
-      navigate("/");
-    } catch (error: any) {
-      alert(error.message);
-    }
     setLoginLoading(false);
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const isLoggedIn = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.log("No token found");
-          return;
-        }
-
-        const response = await AuthService.getInstance().userInfoForToken(
-          token
-        );
-
-        if (
-          isMounted &&
-          response &&
-          (await BackendService.checkHasPhoneAndCamera())
-        ) {
-          navigate("/");
-        } else {
-          navigate("/account");
-        }
-      } catch (error) {
-        console.log("Not logged in", error);
-      }
-    };
-
-    isLoggedIn();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [navigate]);
-
-  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
-    setGoogleLoginLoading(true);
-
-    try {
-      await AuthService.getInstance().googleRegistration(
-        credentialResponse.credential!
-      );
-
-      if (await BackendService.checkHasPhoneAndCamera()) {
-        navigate("/");
-      } else {
-        navigate("/account");
-      }
-    } catch (error: any) {
-      console.log("Login Failed", error);
-      alert("Login Failed");
-    } finally {
-      setGoogleLoginLoading(false);
-    }
   };
 
   return (
@@ -90,17 +33,13 @@ const Login: React.FC = () => {
             {googleLoginLoading ? (
               <div className="text-muted">Loading...</div>
             ) : (
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  handleGoogleLogin(credentialResponse);
+              <GoogleButton
+                onClick={() => {
+                  authContext.loginWithSocial({
+                    provider: "google",
+                    callbackURL: import.meta.env.VITE_BASE_URL + "/login",
+                  });
                 }}
-                onError={() => {
-                  console.log("Login Failed");
-                  alert("Login Failed");
-                }}
-                theme="outline"
-                shape="circle"
-                text="signup_with"
               />
             )}
           </div>
@@ -151,7 +90,7 @@ const Login: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => navigate("/signup")}
+            onClick={() => navigate("/register")}
             className="btn btn-secondary w-100 mt-3"
           >
             Crează cont

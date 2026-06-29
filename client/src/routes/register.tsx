@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
-import { AuthService } from "@genezio/auth";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BackendService } from "genezio-sdk";
+
+import GoogleButton from "react-google-signin-button";
+import "react-google-signin-button/dist/button.css";
+import { useAuth } from "../provider/authProvider";
 
 const Register: React.FC = () => {
+  const authContext = useAuth();
   const navigate = useNavigate();
   const [registerLoading, setRegisterLoading] = useState(false);
   const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
@@ -16,70 +18,20 @@ const Register: React.FC = () => {
     event.preventDefault();
     setRegisterLoading(true);
 
-    try {
-      await AuthService.getInstance().register(email, password, name);
-      navigate("/login");
-    } catch (error: any) {
-      alert(error.message);
-    }
+    authContext
+      .signUpWithEmail({
+        name: name, // required
+        email: email, // required
+        password: password, // required
+      })
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((e) => {
+        alert("User with the same email already exists");
+      });
+
     setRegisterLoading(false);
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const isLoggedIn = async () => {
-      try {
-        const token = localStorage.getItem("token") as string;
-        if (!token) {
-          console.log("No token found");
-          return;
-        }
-
-        const response = await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string
-        );
-
-        if (
-          isMounted &&
-          response &&
-          (await BackendService.checkHasPhoneAndCamera())
-        ) {
-          navigate("/");
-        } else {
-          navigate("/account");
-        }
-      } catch (error) {
-        console.log("Not logged in", error);
-      }
-    };
-
-    isLoggedIn();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [navigate]);
-
-  const handleGoogleLogin = async (credentialResponse: CredentialResponse) => {
-    setGoogleLoginLoading(true);
-
-    try {
-      await AuthService.getInstance().googleRegistration(
-        credentialResponse.credential!
-      );
-
-      if (await BackendService.checkHasPhoneAndCamera()) {
-        navigate("/");
-      } else {
-        navigate("/account");
-      }
-    } catch (error: any) {
-      console.log("Login Failed", error);
-      alert("Login Failed");
-    } finally {
-      setGoogleLoginLoading(false);
-    }
   };
 
   return (
@@ -96,17 +48,13 @@ const Register: React.FC = () => {
                 <span className="visually-hidden">Loading...</span>
               </div>
             ) : (
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  handleGoogleLogin(credentialResponse);
+              <GoogleButton
+                onClick={() => {
+                  authContext.loginWithSocial({
+                    provider: "google",
+                    callbackURL: import.meta.env.VITE_BASE_URL + "/login",
+                  });
                 }}
-                onError={() => {
-                  console.log("Login Failed");
-                  alert("Login Failed");
-                }}
-                theme="outline"
-                shape="circle"
-                text="signup_with"
               />
             )}
           </div>

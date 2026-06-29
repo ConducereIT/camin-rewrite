@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { BackendService } from "genezio-sdk";
 
-const Mentenanta: React.FC = () => {
+interface props {
+  maintenance: {
+    status: boolean | undefined;
+    date: string | undefined;
+  };
+}
+
+const Mentenanta = ({ maintenance }: props) => {
+  console.log(maintenance.status);
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [isMaintenance, setIsMaintenance] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMaintenance = async () => {
-      const maintenance = await BackendService.isMaintenance();
       if (maintenance.status) {
         setIsMaintenance(true);
         const targetDate = new Date(maintenance.date);

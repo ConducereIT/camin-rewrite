@@ -53,24 +53,22 @@ const Calendars: React.FC = () => {
   };
 
   useEffect(() => {
-    const isLoggedIn = async () => {
-      try {
-        const token = localStorage.getItem("token") as string;
-
-        if (!token) {
-          navigate("/login");
-        }
-
-        await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string
-        );
-        await initializeDefaultTab();
-      } catch (error) {
-        console.log("Not logged in", error);
-        navigate("/login");
-      }
-    };
-    isLoggedIn();
+    // const isLoggedIn = async () => {
+    //   try {
+    //     const token = localStorage.getItem("token") as string;
+    //     if (!token) {
+    //       navigate("/login");
+    //     }
+    //     await AuthService.getInstance().userInfoForToken(
+    //       localStorage.getItem("token") as string
+    //     );
+    //     await initializeDefaultTab();
+    //   } catch (error) {
+    //     console.log("Not logged in", error);
+    //     navigate("/login");
+    //   }
+    // };
+    // isLoggedIn();
   }, [navigate]);
 
   useEffect(() => {

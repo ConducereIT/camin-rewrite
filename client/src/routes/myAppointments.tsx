@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AuthService } from "@genezio/auth";
+// import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 import { BackendService } from "genezio-sdk";
 import { formatDate } from "@fullcalendar/core";
@@ -10,23 +10,21 @@ const MyAppointments: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = async () => {
-      try {
-        const token = localStorage.getItem("token") as string;
-
-        if (!token) {
-          navigate("/login");
-        }
-
-        await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string
-        );
-      } catch (error) {
-        console.log("Not logged in", error);
-        navigate("/login");
-      }
-    };
-    isLoggedIn();
+    // const isLoggedIn = async () => {
+    //   try {
+    //     const token = localStorage.getItem("token") as string;
+    //     if (!token) {
+    //       navigate("/login");
+    //     }
+    //     await AuthService.getInstance().userInfoForToken(
+    //       localStorage.getItem("token") as string
+    //     );
+    //   } catch (error) {
+    //     console.log("Not logged in", error);
+    //     navigate("/login");
+    //   }
+    // };
+    // isLoggedIn();
   }, []);
 
   useEffect(() => {
@@ -45,7 +43,7 @@ const MyAppointments: React.FC = () => {
   const handleDeleteEvent = async (event: any) => {
     try {
       const deleteEvents = await BackendService.deleteEventByIdwithUser(
-        event.id
+        event.id,
       );
       if (deleteEvents.status) {
         window.location.reload();
@@ -101,17 +99,17 @@ const MyAppointments: React.FC = () => {
                       </td>
                       <td>
                         {["first", "second", "third", "four"].includes(
-                          event.number
+                          event.number,
                         )
                           ? event.number === "first"
                             ? "1"
                             : event.number === "second"
-                            ? "2"
-                            : event.number === "third"
-                            ? "3"
-                            : event.number === "four"
-                            ? "4"
-                            : "invalid"
+                              ? "2"
+                              : event.number === "third"
+                                ? "3"
+                                : event.number === "four"
+                                  ? "4"
+                                  : "invalid"
                           : ""}
                       </td>
                       <td>

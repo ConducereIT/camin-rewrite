@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NavbarComponent from "../components/navbar.component.tsx";
-import { BackendService } from "genezio-sdk";
-import { AuthService } from "@genezio/auth";
+// import { BackendService } from "genezio-sdk";
+// import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuthApi, useAuthMutation } from "../hooks/api.ts";
 
+type response = {
+  phone: string;
+  camera: string;
+};
 const Account: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [cameraModel, setCameraModel] = useState<string>("");
@@ -13,16 +18,27 @@ const Account: React.FC = () => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const fetchUserDetails = async () => {
-    try {
-      const response = await BackendService.getPhoneAndCamera();
-      setPhoneNumber(response.phone);
-      setCameraModel(response.camera);
-      setEditMode(!!response.phone || !!response.camera);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [data, loadingUserData, errorLoadinUserData] = useAuthApi<response>({
+    method: "GET",
+    location: "/getPhoneAndCamera",
+  });
+
+  const {
+    trigger,
+    loading: loadingMutation,
+    error: errorMutatuion,
+  } = useAuthMutation<response, any>({
+    method: "POST",
+    location: "/insertOrUpdateUserInfo",
+  });
+
+  useEffect(() => {
+    console.log(data);
+    console.log(loadingUserData);
+    setPhoneNumber(data?.phone || "");
+    setCameraModel(data?.camera || "");
+    setEditMode(!!data?.phone || !!data?.camera);
+  }, [data?.camera, data?.phone, loadingUserData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,59 +63,37 @@ const Account: React.FC = () => {
     setLoading(true);
 
     try {
-      if (editMode) {
-        if (
-          (await BackendService.updateInfoUser(phoneNumber, cameraModel)) ===
-          "S-a actualizat!"
-        ) {
-          navigate("/");
-          setEditMode(true);
-        }
-      } else {
-        if (
-          (await BackendService.addInfoUser(phoneNumber, cameraModel)) ===
-          "S-a adaugat!"
-        ) {
-          navigate("/");
-          setEditMode(true);
-        }
-      }
+      // if (editMode) {
+      //   if (
+      //     // (await BackendService.updateInfoUser(phoneNumber, cameraModel)) ===
+      //     "S-a actualizat!"
+      //   ) {
+      //     navigate("/");
+      //     setEditMode(true);
+      //   }
+      // } else {
+      //   if (
+      //     (await BackendService.addInfoUser(phoneNumber, cameraModel)) ===
+      //     "S-a adaugat!"
+      //   ) {
+      //     navigate("/");
+      //     setEditMode(true);
+      //   }
+      // }
+      await trigger({
+        phone: phoneNumber,
+        camera: cameraModel,
+      });
       setLoading(false);
       setError("");
+      navigate("/");
     } catch (error) {
       console.error(error);
       setLoading(false);
       setError("Error updating user details");
+      alert("Error saving new data");
     }
   };
-
-  const getUser = async () => {
-    try {
-      const response = await AuthService.getInstance().userInfo();
-      setUser(response);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserDetails();
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    const isLoggedIn = async () => {
-      try {
-        await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string
-        );
-      } catch (error) {
-        console.log("Not logged in", error);
-        navigate("/login");
-      }
-    };
-    isLoggedIn();
-  }, []);
 
   return (
     <>
