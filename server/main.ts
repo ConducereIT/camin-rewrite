@@ -13,21 +13,29 @@ const port = 8881;
 
 dotenv.config();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+    credentials: true,
+  }),
+);
 app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api", utilityRouter);
-app.use("/api", userRouter);
+app.use("/api/user", userRouter);
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
-app.use(express.json());
-
 const server = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+  prisma.user.findFirst().then((data) => console.log(data));
+  prisma.$connect().catch((e) => {
+    console.error("CANT REACH DB");
+    console.error(e);
+    process.exit(1);
+  });
 });
-
 const shutDownServer = async () => {
   server.close(async () => {
     await prisma.$disconnect();

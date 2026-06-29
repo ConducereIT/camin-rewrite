@@ -2,31 +2,13 @@ import { Request, Response } from "express";
 import moment from "moment";
 import { prisma } from "../db";
 
-export const addInfoUser = async (req: Request, res: Response) => {
-  try {
-    await prisma.infoUser.create({
-      data: {
-        userId: req.betterAuthSession.session.userId,
-        phone: req.body.phone,
-        camera: req.body.camera,
-      },
-    });
-
-    return res.status(200);
-  } catch (error) {
-    console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
-    return res
-      .status(500)
-      .send("Eroare internă. Te rog reîncearcă mai târziu!");
-  }
-};
-
 export const getInfoUser = async (req: Request, res: Response) => {
   try {
     const infoUser = await prisma.infoUser.findUnique({
       where: { userId: req.betterAuthSession.session.userId },
     });
 
+    console.log(infoUser);
     if (!infoUser) {
       return res.json({
         phone: "",
@@ -46,20 +28,21 @@ export const getInfoUser = async (req: Request, res: Response) => {
   }
 };
 
-export const checkHasPhoneAndCamera = async (req: Request, res: Response) => {
-  try {
-    const infoUser = await prisma.infoUser.findUnique({
-      where: { userId: req.betterAuthSession.session.userId },
-    });
+// this check can be done by the front-end
+// export const checkHasPhoneAndCamera = async (req: Request, res: Response) => {
+//   try {
+//     const infoUser = await prisma.infoUser.findUnique({
+//       where: { userId: req.betterAuthSession.session.userId },
+//     });
 
-    return res.send(
-      !(infoUser?.phone === undefined || infoUser?.camera === undefined),
-    );
-  } catch (error) {
-    console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
-    return res.status(500).send(false);
-  }
-};
+//     return res.send(
+//       !(infoUser?.phone === undefined || infoUser?.camera === undefined),
+//     );
+//   } catch (error) {
+//     console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
+//     return res.status(500).send(false);
+//   }
+// };
 
 export const updateInfoUser = async (req: Request, res: Response) => {
   try {
@@ -78,6 +61,52 @@ export const updateInfoUser = async (req: Request, res: Response) => {
   }
 };
 
+export const addInfoUser = async (req: Request, res: Response) => {
+  try {
+    await prisma.infoUser.create({
+      data: {
+        userId: req.betterAuthSession.session.userId,
+        phone: req.body.phone,
+        camera: req.body.camera,
+      },
+    });
+
+    return res.status(200);
+  } catch (error) {
+    console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
+    return res
+      .status(500)
+      .send("Eroare internă. Te rog reîncearcă mai târziu!");
+  }
+};
+
+export const insertOrUpdateUserInfo = async (req: Request, res: Response) => {
+  console.log(req.body);
+  if (req.body.phone.length == 0 || req.body.camera.length == 0) {
+    return res.send("Wrong Request");
+  }
+  try {
+    await prisma.infoUser.upsert({
+      where: {
+        userId: req.betterAuthSession.session.userId,
+      },
+      update: {
+        phone: req.body.phone,
+        camera: req.body.camera,
+      },
+      create: {
+        userId: req.betterAuthSession.session.userId,
+        phone: req.body.phone,
+        camera: req.body.camera,
+      },
+    });
+    res.send();
+  } catch (err) {
+    return res
+      .status(500)
+      .send("Eroare internă. Te rog reîncearcă mai târziu!");
+  }
+};
 export const getEventsCalendar = async (req: Request, res: Response) => {
   try {
     // Find all events in the database
@@ -166,17 +195,9 @@ export const deleteEvent = async (req: Request, res: Response) => {
 
 export const getPhoneAndCamera = async (req: Request, res: Response) => {
   try {
-    if (req.betterAuthSession.session.userId) {
-      return res.json({
-        phone: "",
-        camera: "",
-      });
-    }
-
     const infoUser = await prisma.infoUser.findUnique({
       where: { userId: req.betterAuthSession.session.userId },
     });
-
     if (!infoUser) {
       return res.json({
         phone: "",

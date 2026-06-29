@@ -1,13 +1,12 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import {
-  addInfoUser,
   addPersonCalendar,
-  checkHasPhoneAndCamera,
   deleteEvent,
   deletePerson,
   getAllEvents,
   getEventsCalendar,
   getPhoneAndCamera,
+  insertOrUpdateUserInfo,
   updateInfoUser,
 } from "../controllers/user";
 import { routeProtector } from "../middleware/auth";
@@ -15,9 +14,10 @@ import { routeProtector } from "../middleware/auth";
 export const userRouter = express.Router();
 userRouter.use(routeProtector);
 
-userRouter.post("/addInfoUser", addInfoUser);
-userRouter.get("/checkHasPhoneAndCamera", checkHasPhoneAndCamera);
-userRouter.post("/updateInfoUser", updateInfoUser);
+userRouter.post("/insertOrUpdateUserInfo", insertOrUpdateUserInfo);
+// userRouter.post("/addInfoUser", addInfoUser);
+// userRouter.get("/checkHasPhoneAndCamera", checkHasPhoneAndCamera);
+// userRouter.post("/updateInfoUser", updateInfoUser);
 userRouter.get("/getEventsCalendar", getEventsCalendar);
 userRouter.get("/getAllEvents", getAllEvents);
 userRouter.post("/deleteEvent", deleteEvent);
