@@ -5,7 +5,8 @@ import { prisma } from "./db";
 import bcrypt from "bcrypt";
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_BASE_URL,
+  baseURL: process.env.BETTER_AUTH_URL,
+  trustedOrigins: ["http://localhost:5174"],
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
@@ -63,5 +64,6 @@ export const auth = betterAuth({
       generateId: "uuid",
       defaultFindManyLimit: 50,
     },
+    useSecureCookies: false,
   },
 });
