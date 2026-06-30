@@ -113,6 +113,7 @@ export function ApiFactory({
           const jsonData = await response.json();
           setData(jsonData);
           setIsLoading(false);
+          return jsonData;
         } catch (err) {
           setError(true);
           setIsLoading(false);
