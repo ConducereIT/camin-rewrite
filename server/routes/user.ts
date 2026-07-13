@@ -18,7 +18,7 @@ userRouter.post("/insertOrUpdateUserInfo", insertOrUpdateUserInfo);
 // userRouter.post("/addInfoUser", addInfoUser);
 // userRouter.get("/checkHasPhoneAndCamera", checkHasPhoneAndCamera);
 // userRouter.post("/updateInfoUser", updateInfoUser);
-userRouter.get("/getEventsCalendar", getEventsCalendar);
+userRouter.post("/getEventsCalendar", getEventsCalendar);
 userRouter.get("/getAllEvents", getAllEvents);
 userRouter.post("/deleteEvent", deleteEvent);
 userRouter.get("/getPhoneAndCamera", getPhoneAndCamera);
