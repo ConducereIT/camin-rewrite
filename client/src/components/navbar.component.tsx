@@ -78,17 +78,31 @@ export const NavbarComponent = () => {
             <span className="navbar-toggler-icon"></span>
           </a>
 
-          <div className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`} id="navbarNav">
-            <div className="d-flex justify-content-end" style={{ flexDirection: "row", width: "100%" }}>
-              <a className="btn btn-light me-2" href="/account" style={{ border: "1px solid black" }}>
+          <div
+            className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}
+            id="navbarNav"
+          >
+            <div
+              className="d-flex justify-content-end"
+              style={{ flexDirection: "row", width: "100%" }}
+            >
+              <a
+                className="btn btn-light me-2"
+                href="/account"
+                style={{ border: "1px solid black" }}
+              >
                 Cont
               </a>
-              <a className="btn btn-light me-2" href="/myappointments" style={{ border: "1px solid black" }}>
+              <a
+                className="btn btn-light me-2"
+                href="/myappointments"
+                style={{ border: "1px solid black" }}
+              >
                 Programări
               </a>
-              <a className="btn btn-light me-2" href="mailto:rezervaricaminleu@gmail.com" style={{ border: "1px solid black" }}>
+              {/* <a className="btn btn-light me-2" href="mailto:rezervaricaminleu@gmail.com" style={{ border: "1px solid black" }}>
                 Contact
-              </a>
+              </a> */}
               <a
                 className="btn btn-light"
                 onClick={async () => {

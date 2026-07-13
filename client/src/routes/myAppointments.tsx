@@ -1,50 +1,45 @@
 import React, { useEffect, useState } from "react";
-// import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 import { BackendService } from "genezio-sdk";
 import { formatDate } from "@fullcalendar/core";
 import NavbarComponent from "../components/navbar.component.tsx";
+import { useAuthApi, useAuthMutation } from "../hooks/api.ts";
 
+type response = {
+  title: string;
+  start: string;
+  end: string;
+};
+
+type request = {
+  eventId: string;
+};
 const MyAppointments: React.FC = () => {
   const [eventsDate, setEventsDate] = useState<{ [key: string]: any }>({});
+  const [allUserEvents, loadingEvents, errorLoadinEvents] = useAuthApi<
+    response[]
+  >({
+    method: "GET",
+    location: "/getAllEvents",
+  });
+
+  const { trigger: deleteEvent } = useAuthMutation<request, any>({
+    method: "POST",
+    location: "/deleteEvent",
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
-    // const isLoggedIn = async () => {
-    //   try {
-    //     const token = localStorage.getItem("token") as string;
-    //     if (!token) {
-    //       navigate("/login");
-    //     }
-    //     await AuthService.getInstance().userInfoForToken(
-    //       localStorage.getItem("token") as string
-    //     );
-    //   } catch (error) {
-    //     console.log("Not logged in", error);
-    //     navigate("/login");
-    //   }
-    // };
-    // isLoggedIn();
-  }, []);
-
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const events = await BackendService.getAllEventsByUser();
-        events.sort((a: any, b: any) => b.start - a.start);
-        setEventsDate(events);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchEvents();
-  }, []);
+    // here este doar un getAuth
+    const events = allUserEvents || [];
+    events.sort((a: any, b: any) => b.start - a.start);
+    setEventsDate(events);
+  }, [allUserEvents]);
 
   const handleDeleteEvent = async (event: any) => {
     try {
-      const deleteEvents = await BackendService.deleteEventByIdwithUser(
-        event.id,
-      );
+      // mutationAuth
+      const deleteEvents = await deleteEvent({ eventId: event.id });
       if (deleteEvents.status) {
         window.location.reload();
       } else {
@@ -71,7 +66,7 @@ const MyAppointments: React.FC = () => {
                     <th scope="col">Incepe la</th>
                     <th scope="col">Se termină la</th>
                     <th scope="col">Masina</th>
-                    <th scope="col">Delete</th>
+                    {/* <th scope="col">Delete</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -113,13 +108,13 @@ const MyAppointments: React.FC = () => {
                           : ""}
                       </td>
                       <td>
-                        <button
+                        {/* <button
                           type="button"
                           className="btn btn-danger btn-sm"
                           onClick={() => handleDeleteEvent(event)}
                         >
                           Delete
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   ))}

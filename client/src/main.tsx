@@ -17,6 +17,8 @@ import Login from "./routes/login.tsx";
 import Register from "./routes/register.tsx";
 import { RouteProtector } from "./routes/routeProtector.tsx";
 import Account from "./routes/account.tsx";
+import Calendars from "./routes/calendar.tsx";
+import MyAppointments from "./routes/myAppointments.tsx";
 
 AuthService.getInstance().setTokenAndRegion(
   "1-a3036f2f-8a7c-495c-8d24-06695b1ad57f",
@@ -42,51 +44,14 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <>Home</>,
+          element: <Calendars />,
+        },
+        {
+          path: "/myappointments",
+          element: <MyAppointments />,
         },
       ],
     },
-
-    // path: "/",
-    // element: <RouteProtector />,
-    // children: [
-    //   {
-    //     path: "",
-    //     element: isMentenanta ? <Mentenanta /> : <Calendar />,
-    //   },
-    //   {
-    //     path: "login",
-    //     element: isMentenanta ? <Mentenanta /> : <Login />,
-    //   },
-    //   {
-    //     path: "signup",
-    //     element: isMentenanta ? <Mentenanta /> : <Register />,
-    //   },
-    //   {
-    //     path: "account",
-    //     element: isMentenanta ? <Mentenanta /> : <Account />,
-    //   },
-    //   {
-    //     path: "admin",
-    //     element: isMentenanta ? <Mentenanta /> : <Admin />,
-    //   },
-    //   {
-    //     path: "myappointments",
-    //     element: isMentenanta ? <Mentenanta /> : <MyAppointments />,
-    //   },
-    //   {
-    //     path: "newLogin",
-    //     element: <NewLogin />,
-    //   },
-    //   {
-    //     path: "callback",
-    //     element: (
-    //       <>
-    //         <h1>Success</h1>
-    //       </>
-    //     ),
-    //   },
-    // ],
   ]);
 
   return (

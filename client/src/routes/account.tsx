@@ -63,23 +63,6 @@ const Account: React.FC = () => {
     setLoading(true);
 
     try {
-      // if (editMode) {
-      //   if (
-      //     // (await BackendService.updateInfoUser(phoneNumber, cameraModel)) ===
-      //     "S-a actualizat!"
-      //   ) {
-      //     navigate("/");
-      //     setEditMode(true);
-      //   }
-      // } else {
-      //   if (
-      //     (await BackendService.addInfoUser(phoneNumber, cameraModel)) ===
-      //     "S-a adaugat!"
-      //   ) {
-      //     navigate("/");
-      //     setEditMode(true);
-      //   }
-      // }
       await trigger({
         phone: phoneNumber,
         camera: cameraModel,

@@ -2,13 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Col, Container, Nav, Row, Tab, Card } from "react-bootstrap";
 import CalendarComponent from "../components/calendar.component.tsx";
 import CalendarMobileComponent from "../components/calendar.mobile.component.tsx";
-import { BackendService } from "genezio-sdk";
-import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 import "./styles.css";
 import NavbarComponent from "../components/navbar.component.tsx";
+import { useAuthMutation } from "../hooks/api.ts";
 
 const dayNames = ["first", "second", "third", "four"];
+
+type reqBody = {
+  numberCalendar: string;
+};
 
 const Calendars: React.FC = () => {
   const [eventsDate, setEventsDate] = useState<{ [key: string]: any }>({});
@@ -16,9 +19,18 @@ const Calendars: React.FC = () => {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const {
+    trigger: getEventsCalendar,
+    loading: loadingMutation,
+    error: errorMutatuion,
+  } = useAuthMutation<reqBody, any>({
+    method: "POST",
+    location: "/getEventsCalendar",
+  });
+
   const fetchEventsForDay = useCallback(async (day: string) => {
     try {
-      return await BackendService.getEventsCalendar(day);
+      return await getEventsCalendar({ numberCalendar: day });
     } catch (error) {
       console.log(error);
       return [];
@@ -28,6 +40,8 @@ const Calendars: React.FC = () => {
   const initializeDefaultTab = async () => {
     try {
       const events = await fetchEventsForDay(activeTab);
+      console.log("Here");
+      console.log(events);
       setEventsDate((prevEvents) => ({
         ...prevEvents,
         [activeTab]: events,
@@ -53,22 +67,12 @@ const Calendars: React.FC = () => {
   };
 
   useEffect(() => {
-    // const isLoggedIn = async () => {
-    //   try {
-    //     const token = localStorage.getItem("token") as string;
-    //     if (!token) {
-    //       navigate("/login");
-    //     }
-    //     await AuthService.getInstance().userInfoForToken(
-    //       localStorage.getItem("token") as string
-    //     );
-    //     await initializeDefaultTab();
-    //   } catch (error) {
-    //     console.log("Not logged in", error);
-    //     navigate("/login");
-    //   }
-    // };
-    // isLoggedIn();
+    const isLoggedIn = async () => {
+      try {
+        await initializeDefaultTab();
+      } catch (error) {}
+    };
+    isLoggedIn();
   }, [navigate]);
 
   useEffect(() => {
