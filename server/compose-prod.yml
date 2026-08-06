@@ -12,8 +12,8 @@ services:
     command: tunnel run
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    environment:
-      - "TUNNEL_TOKEN=eyJhIjoiNzc3NjJlNmM1YTkzZWJlMjVlYTQ4OWYyZjZjZjIzY2QiLCJ0IjoiMjI3OWM1YTQtZjljNC00ZDQ4LWJkMTUtM2RjMGNmNmUyZDBhIiwicyI6Ik1HRTVZekV5WVdRdE4yWXlNUzAwWTJNeExXSXdabVV0TVRFek1qQXlaRGd5Tm1ZMSJ9"
+    env_file:
+      - ./.env
     healthcheck:
       test: ["CMD", "cloudflared", "--version"]
       interval: 30s
