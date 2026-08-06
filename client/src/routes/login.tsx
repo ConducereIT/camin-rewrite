@@ -25,6 +25,12 @@ const Login: React.FC = () => {
     setLoginLoading(false);
   };
 
+  useEffect(() => {
+    if (authContext.isAuthenticated) {
+      navigate("/");
+    }
+  }, [authContext.isAuthenticated]);
+
   return (
     <div className="d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4" style={{ maxWidth: "400px", width: "100%" }}>
@@ -37,7 +43,7 @@ const Login: React.FC = () => {
                 onClick={() => {
                   authContext.loginWithSocial({
                     provider: "google",
-                    callbackURL: import.meta.env.VITE_BASE_URL + "/login",
+                    callbackURL: import.meta.env.VITE_BASE_URL + "/",
                   });
                 }}
               />

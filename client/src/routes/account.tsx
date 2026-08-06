@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import NavbarComponent from "../components/navbar.component.tsx";
-// import { BackendService } from "genezio-sdk";
-// import { AuthService } from "@genezio/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuthApi, useAuthMutation } from "../hooks/api.ts";
 

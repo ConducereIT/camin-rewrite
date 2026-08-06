@@ -52,7 +52,7 @@ const Register: React.FC = () => {
                 onClick={() => {
                   authContext.loginWithSocial({
                     provider: "google",
-                    callbackURL: import.meta.env.VITE_BASE_URL + "/login",
+                    callbackURL: import.meta.env.VITE_BASE_URL + "/",
                   });
                 }}
               />

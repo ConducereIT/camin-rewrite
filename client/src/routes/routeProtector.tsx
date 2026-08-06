@@ -10,6 +10,7 @@ type response = {
 
 export const RouteProtector: React.FC = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   // because useAuthApi does the check in case the res.status is 401 there is no need to check if the user is authenticated
   const [data, loading, error] = useAuthApi<response>({
@@ -21,7 +22,14 @@ export const RouteProtector: React.FC = () => {
       navigate("/account");
     }
   }, [data?.phone, data?.camera]);
-
+  if (error) {
+    navigate("/login");
+  }
+  // useEffect(() => {
+  //   if (!auth.isAuthenticated) {
+  //     navigate("/login");
+  //   }
+  // }, [auth.isAuthenticated]);
   if (
     !loading &&
     !error &&

@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { isMaintenanceController } from "../controllers/utility";
+import { isMaintenanceController } from "../controllers/utility.js";
 
 export const utilityRouter = express.Router();
 

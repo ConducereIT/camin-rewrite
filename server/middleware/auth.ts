@@ -1,6 +1,6 @@
 import { Session, User } from "better-auth/types";
 import { NextFunction, Request, Response } from "express";
-import { auth } from "../auth";
+import { auth } from "../auth.js";
 import { fromNodeHeaders } from "better-auth/node";
 
 declare module "express-serve-static-core" {

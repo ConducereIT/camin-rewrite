@@ -103,7 +103,7 @@ export const NavbarComponent = () => {
               {/* <a className="btn btn-light me-2" href="mailto:rezervaricaminleu@gmail.com" style={{ border: "1px solid black" }}>
                 Contact
               </a> */}
-              <a
+              {/* <a
                 className="btn btn-light"
                 onClick={async () => {
                   await AuthService.getInstance().logout();
@@ -112,7 +112,7 @@ export const NavbarComponent = () => {
                 style={{ border: "1px solid black" }}
               >
                 Logout
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

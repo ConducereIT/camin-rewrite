@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import { AuthService } from "@genezio/auth";
 import "bootstrap/dist/css/bootstrap.min.css";
 // @ts-ignore
 import("bootstrap/dist/js/bootstrap.bundle.min.js");
@@ -20,11 +19,6 @@ import Account from "./routes/account.tsx";
 import Calendars from "./routes/calendar.tsx";
 import MyAppointments from "./routes/myAppointments.tsx";
 
-AuthService.getInstance().setTokenAndRegion(
-  "1-a3036f2f-8a7c-495c-8d24-06695b1ad57f",
-  "eu-central-1",
-);
-
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -36,10 +30,6 @@ const App = () => {
       element: <Register />,
     },
     {
-      path: "/account",
-      element: <Account />,
-    },
-    {
       element: <RouteProtector />,
       children: [
         {
@@ -49,6 +39,10 @@ const App = () => {
         {
           path: "/myappointments",
           element: <MyAppointments />,
+        },
+        {
+          path: "/account",
+          element: <Account />,
         },
       ],
     },

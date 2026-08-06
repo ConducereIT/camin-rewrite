@@ -14,3 +14,13 @@ services:
     restart: always
     ports:
     - 8030:8080
+  # backend:
+  #   image: blitzcloud/camin:0.0.2
+  #   restart: always
+  #   depends_on:
+  #     - db
+  #     - adminer
+  #   ports:
+  #     - 8881:8881
+  #   env_file:
+  #     - ./.env

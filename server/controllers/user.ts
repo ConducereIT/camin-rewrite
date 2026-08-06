@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import moment from "moment";
-import { prisma } from "../db";
+import { prisma } from "../db.js";
 
 export const getInfoUser = async (req: Request, res: Response) => {
   try {

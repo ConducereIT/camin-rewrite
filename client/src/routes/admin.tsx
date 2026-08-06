@@ -19,7 +19,7 @@ const Admin: React.FC = () => {
         }
 
         const response = await AuthService.getInstance().userInfoForToken(
-          localStorage.getItem("token") as string
+          localStorage.getItem("token") as string,
         );
         if (
           response.email === "rezervaricaminleu@gmail.com" ||
@@ -136,12 +136,12 @@ const Admin: React.FC = () => {
                     {event.number == "first"
                       ? "1"
                       : event.number == "second"
-                      ? "2"
-                      : event.number == "third"
-                      ? "3"
-                      : event.number == "four"
-                      ? "4"
-                      : "invalid"}
+                        ? "2"
+                        : event.number == "third"
+                          ? "3"
+                          : event.number == "four"
+                            ? "4"
+                            : "invalid"}
                   </td>
                   <td>
                     <button

@@ -8,8 +8,8 @@ import {
   getPhoneAndCamera,
   insertOrUpdateUserInfo,
   updateInfoUser,
-} from "../controllers/user";
-import { routeProtector } from "../middleware/auth";
+} from "../controllers/user.js";
+import { routeProtector } from "../middleware/auth.js";
 
 export const userRouter = express.Router();
 userRouter.use(routeProtector);
