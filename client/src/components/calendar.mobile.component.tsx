@@ -61,7 +61,7 @@ const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
         endDate,
         dayCalendar,
         getUserInfo.phone,
-        getUserInfo.camera
+        getUserInfo.camera,
       );
 
       if (status.status) {
@@ -84,7 +84,7 @@ const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
       const endDate = event.event.endStr;
       const deleteEvents = await BackendService.deletePerson(
         startDate,
-        endDate
+        endDate,
       );
 
       if (deleteEvents.status) {
@@ -111,10 +111,6 @@ const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
     }
     return event;
   });
-
-  if (!eventsForDay || eventsForDay.length === 0) {
-    return null;
-  }
 
   return (
     <div className="calendar" ref={calendarRef}>
