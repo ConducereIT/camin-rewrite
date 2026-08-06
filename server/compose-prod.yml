@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: example
       POSTGRES_DB: rezervariCamin
     volumes:
-    - ../volumes/db:/var/lib/postgresql
+    - ../appdata/spalatorie/db:/var/lib/postgresql
   adminer:
     image: adminer
     restart: always
