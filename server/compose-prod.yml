@@ -36,7 +36,7 @@ services:
     ports:
     - 8030:8080
   backend:
-    image: blitzcloud/camin:0.0.3
+    image: blitzcloud/camin:latest    
     restart: always
     depends_on:
       - db
