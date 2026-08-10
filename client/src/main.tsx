@@ -30,6 +30,10 @@ const App = () => {
       element: <Register />,
     },
     {
+      path: "/account",
+      element: <Account />,
+    },
+    {
       element: <RouteProtector />,
       children: [
         {
@@ -39,10 +43,6 @@ const App = () => {
         {
           path: "/myappointments",
           element: <MyAppointments />,
-        },
-        {
-          path: "/account",
-          element: <Account />,
         },
       ],
     },
