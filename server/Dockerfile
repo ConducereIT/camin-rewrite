@@ -33,7 +33,7 @@ COPY --chown=node:node --from=build /app/node_modules ./node_modules
 COPY --chown=node:node --from=build /app/build ./dist
 COPY --chown=node:node --from=build /app/prisma ./dist/prisma 
 
-COPY --chown=node:node ./web ./dist/client
+COPY --chown=node:node ./client ./dist/client
 
 RUN ls /app
 EXPOSE 8881
