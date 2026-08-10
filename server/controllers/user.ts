@@ -160,6 +160,36 @@ export const getAllEvents = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllEventsByUser = async (req: Request, res: Response) => {
+  try {
+    // Find all events in the database
+    const events = await prisma.events.findMany({
+      where: {
+        email: req.betterAuthSession.user.email,
+      },
+    });
+
+    // Convert the events to the desired format for the calendar
+    return res.json(
+      events.map((event) => {
+        const eventStart = new Date(event.start_event).toISOString();
+        const eventEnd = new Date(event.end_event).toISOString();
+        const title = event.title + "  " + event.phone + " - " + event.camera;
+        const number = event.calendar_n;
+        return {
+          id: event.id,
+          title: title,
+          start: eventStart,
+          end: eventEnd,
+          number: number,
+        };
+      }),
+    );
+  } catch (error) {
+    console.error("Eroare internă. Te rog reîncearcă mai târziu!", error);
+    return res.status(500).json([]);
+  }
+};
 export const deleteEvent = async (req: Request, res: Response) => {
   const eventId = req.body.eventId;
   try {

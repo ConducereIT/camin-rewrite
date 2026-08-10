@@ -20,7 +20,7 @@ const MyAppointments: React.FC = () => {
     response[]
   >({
     method: "GET",
-    location: "/getAllEvents",
+    location: "/getAllEventsByUser",
   });
 
   const { trigger: deleteEvent } = useAuthMutation<request, any>({
