@@ -21,7 +21,7 @@ app.use(
   }),
 );
 
-app.use(express.static(path.join(import.meta.dirname, "./web")));
+app.use(express.static(path.join(import.meta.dirname, "./client")));
 app.use(morgan("dev"));
 app.use(express.json());
 
