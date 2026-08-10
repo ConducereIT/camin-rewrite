@@ -31,8 +31,9 @@ app.use("/api/user", userRouter);
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 app.get("{*any}", (req, res) => {
-  res.sendFile(path.join(import.meta.dirname, "./web", "index.html"));
+  res.sendFile(path.join(import.meta.dirname, "./client", "index.html"));
 });
+
 const server = app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
   prisma.user.findFirst().then((data) => console.log(data));
@@ -42,6 +43,7 @@ const server = app.listen(port, () => {
     process.exit(1);
   });
 });
+
 const shutDownServer = async () => {
   console.log("Shuting down");
   server.close(async () => {
