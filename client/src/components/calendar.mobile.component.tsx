@@ -6,6 +6,8 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { BackendService } from "genezio-sdk";
 import { Modal, Button, Toast, ToastContainer, Spinner } from "react-bootstrap";
 import { AuthService } from "@genezio/auth";
+import { useAuth } from "../provider/authProvider";
+import { useAuthApi, useAuthMutation } from "../hooks/api";
 
 interface RenderCalendarProps {
   dayCalendar: string;
@@ -13,26 +15,66 @@ interface RenderCalendarProps {
   eventsDate: Record<string, any[]>;
 }
 
+interface RenderCalendarProps {
+  dayCalendar: string;
+  updateEventsDate: (day: string, events: any) => void;
+  eventsDate: Record<string, any[]>;
+}
+
+type response = {
+  phone: string;
+  camera: string;
+};
+
+type addPersonCalendarReq = {
+  startDate: any;
+  endDate: any;
+  number?: string;
+  phone?: string;
+  camera?: string;
+};
+
+type StatusResponse = {
+  status: boolean;
+  message: string;
+};
 const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
   dayCalendar,
   eventsDate,
 }) => {
   const [notification, setNotification] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false);
+  const [hoveredEvent, setHoveredEvent] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<any | null>(null);
+  const [showToast, setShowToast] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userName, setUserName] = useState<string | null>(null); // pentru a stoca numele utilizatorului
+  const [userName, setUserName] = useState<string | null>(null);
   const calendarRef = useRef<any>(null);
+  const authContext = useAuth();
 
+  const [getUserInfo, loadingUserData, errorLoadinUserData] =
+    useAuthApi<response>({
+      method: "GET",
+      location: "/getPhoneAndCamera",
+    });
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const response = await AuthService.getInstance().userInfo();
-      setUserName(response.name!);
-    };
+    setUserName(authContext.user?.name!);
+  }, [authContext.user?.name]);
 
-    fetchUserInfo();
-  }, []);
+  const { trigger: addPersonCalendar } = useAuthMutation<
+    addPersonCalendarReq,
+    StatusResponse
+  >({
+    method: "POST",
+    location: "/addPersonCalendar",
+  });
+  const { trigger: deletePerson } = useAuthMutation<
+    addPersonCalendarReq,
+    StatusResponse
+  >({
+    method: "POST",
+    location: "/deletePerson",
+  });
 
   const showNotification = (message: string) => {
     setNotification(message);
@@ -54,15 +96,14 @@ const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
     const startDate = selectedDate.startStr;
     const endDate = selectedDate.endStr;
 
-    const getUserInfo = await BackendService.getInfoUser();
     try {
-      const status = await BackendService.addPersonCalendar(
-        startDate,
-        endDate,
-        dayCalendar,
-        getUserInfo.phone,
-        getUserInfo.camera,
-      );
+      const status: StatusResponse = await addPersonCalendar({
+        startDate: startDate,
+        endDate: endDate,
+        number: dayCalendar,
+        phone: getUserInfo?.phone!,
+        camera: getUserInfo?.camera!,
+      });
 
       if (status.status) {
         window.location.reload();
@@ -82,10 +123,11 @@ const RenderCalendarMobile: React.FC<RenderCalendarProps> = ({
     try {
       const startDate = event.event.startStr;
       const endDate = event.event.endStr;
-      const deleteEvents = await BackendService.deletePerson(
+
+      const deleteEvents: StatusResponse = await deletePerson({
         startDate,
         endDate,
-      );
+      });
 
       if (deleteEvents.status) {
         showNotification(deleteEvents.message);
