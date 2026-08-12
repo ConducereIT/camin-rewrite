@@ -22,7 +22,7 @@ app.use(
 );
 
 app.use(express.static(path.join(import.meta.dirname, "./client")));
-app.use(morgan("dev"));
+app.use(morgan("combined"));
 app.use(express.json());
 
 app.use("/api", utilityRouter);
