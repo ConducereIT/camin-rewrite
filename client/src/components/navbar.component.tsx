@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { AuthService } from "@genezio/auth";
 import LogoWhite from "../assets/Logo fata.svg";
+import { useAuth } from "../provider/authProvider";
 
 export const NavbarComponent = () => {
   const [scrolled, setScrolled] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
   const [isCollapsed, setIsCollapsed] = useState(true);
 
+  const auth = useAuth();
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.scrollY;
@@ -103,16 +104,16 @@ export const NavbarComponent = () => {
               {/* <a className="btn btn-light me-2" href="mailto:rezervaricaminleu@gmail.com" style={{ border: "1px solid black" }}>
                 Contact
               </a> */}
-              {/* <a
+              <a
                 className="btn btn-light"
                 onClick={async () => {
-                  await AuthService.getInstance().logout();
+                  await auth.logout();
                   window.location.reload();
                 }}
                 style={{ border: "1px solid black" }}
               >
                 Logout
-              </a> */}
+              </a>
             </div>
           </div>
         </div>
