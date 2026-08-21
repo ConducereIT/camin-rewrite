@@ -11,6 +11,14 @@ type response = {
   end: string;
 };
 
+type addPersonCalendarReq = {
+  startDate: any;
+  endDate: any;
+  number?: string;
+  phone?: string;
+  camera?: string;
+};
+
 type request = {
   eventId: string;
 };
@@ -23,9 +31,9 @@ const MyAppointments: React.FC = () => {
     location: "/getAllEventsByUser",
   });
 
-  const { trigger: deleteEvent } = useAuthMutation<request, any>({
+  const { trigger: deleteEvent } = useAuthMutation<addPersonCalendarReq, any>({
     method: "POST",
-    location: "/deleteEvent",
+    location: "/deletePerson",
   });
   const navigate = useNavigate();
 
@@ -36,10 +44,14 @@ const MyAppointments: React.FC = () => {
     setEventsDate(events);
   }, [allUserEvents]);
 
-  const handleDeleteEvent = async (event: any) => {
+  const handleDeleteEvent = async (event: addPersonCalendarReq) => {
     try {
       // mutationAuth
-      const deleteEvents = await deleteEvent({ eventId: event.id });
+      console.log(event);
+      const deleteEvents = await deleteEvent({
+        startDate: event.start,
+        endDate: event.end,
+      });
       if (deleteEvents.status) {
         window.location.reload();
       } else {
@@ -108,13 +120,13 @@ const MyAppointments: React.FC = () => {
                           : ""}
                       </td>
                       <td>
-                        {/* <button
+                        <button
                           type="button"
                           className="btn btn-danger btn-sm"
                           onClick={() => handleDeleteEvent(event)}
                         >
                           Delete
-                        </button> */}
+                        </button>
                       </td>
                     </tr>
                   ))}

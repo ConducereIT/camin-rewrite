@@ -4,6 +4,7 @@ import {
   deleteEvent,
   deletePerson,
   getAllEvents,
+  getAllEventsByUser,
   getEventsCalendar,
   getPhoneAndCamera,
   insertOrUpdateUserInfo,
@@ -20,7 +21,8 @@ userRouter.post("/insertOrUpdateUserInfo", insertOrUpdateUserInfo);
 // userRouter.post("/updateInfoUser", updateInfoUser);
 userRouter.post("/getEventsCalendar", getEventsCalendar);
 userRouter.get("/getAllEvents", getAllEvents);
+userRouter.get("/getAllEventsByUser", getAllEventsByUser);
 // userRouter.post("/deleteEvent", deleteEvent);
 userRouter.get("/getPhoneAndCamera", getPhoneAndCamera);
 userRouter.post("/addPersonCalendar", addPersonCalendar);
-// userRouter.post("/deletePerson", deletePerson);
+userRouter.post("/deletePerson", deletePerson);

@@ -102,6 +102,7 @@ export const insertOrUpdateUserInfo = async (req: Request, res: Response) => {
     });
     res.send();
   } catch (err) {
+    console.log(err);
     return res
       .status(500)
       .send("Eroare internă. Te rog reîncearcă mai târziu!");
@@ -431,6 +432,7 @@ export const addPersonCalendar = async (req: Request, res: Response) => {
 
 export const deletePerson = async (req: Request, res: Response) => {
   try {
+    console.log(req.body);
     // Find the event to deleted
     const findEventToDeleted = await prisma.events.findFirst({
       where: {
